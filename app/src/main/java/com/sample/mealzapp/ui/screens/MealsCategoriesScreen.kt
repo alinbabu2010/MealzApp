@@ -2,6 +2,7 @@ package com.sample.mealzapp.ui.screens
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -19,16 +20,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.sample.mealzapp.R
 import com.sample.mealzapp.data.models.Category
 import com.sample.mealzapp.ui.components.ProgressErrorView
+import com.sample.mealzapp.ui.navigations.MealsScreens
 import com.sample.mealzapp.ui.states.MealsUiState
 import com.sample.mealzapp.ui.theme.MealzAppTheme
 import com.sample.mealzapp.ui.viewmodel.MealsCategoriesViewModel
 
 @Composable
-fun MealsCategoriesScreen() {
+fun MealsCategoriesScreen(navController: NavHostController? = null) {
 
     val viewModel = hiltViewModel<MealsCategoriesViewModel>()
     val uiState = viewModel.uiState.collectAsState().value
@@ -41,7 +44,10 @@ fun MealsCategoriesScreen() {
         MealsUiState.State.Success -> {
             LazyColumn(contentPadding = PaddingValues(dimensionResource(R.dimen.lazy_column_padding))) {
                 items(uiState.data) { category ->
-                    MealCategory(category)
+                    MealCategory(category) { id ->
+                        val route = "${MealsScreens.DETAILS_SCREEN.name}/$id"
+                        navController?.navigate(route)
+                    }
                 }
             }
         }
@@ -51,7 +57,7 @@ fun MealsCategoriesScreen() {
 
 
 @Composable
-fun MealCategory(category: Category) {
+fun MealCategory(category: Category, navigationCallBack: (String) -> Unit) {
 
     var isExpanded by remember {
         mutableStateOf(false)
@@ -67,6 +73,9 @@ fun MealCategory(category: Category) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = dimensionResource(R.dimen.category_card_padding))
+            .clickable {
+                navigationCallBack(category.id)
+            }
     ) {
         Row(Modifier.animateContentSize()) {
 
