@@ -1,5 +1,6 @@
 package com.sample.mealzapp.ui.screens
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -7,10 +8,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -51,6 +52,15 @@ fun MealsCategoriesScreen() {
 
 @Composable
 fun MealCategory(category: Category) {
+
+    var isExpanded by remember {
+        mutableStateOf(false)
+    }
+
+    var lineCount by rememberSaveable {
+        mutableStateOf(3)
+    }
+
     Card(
         shape = RoundedCornerShape(dimensionResource(R.dimen.category_card_corner_size)),
         elevation = dimensionResource(R.dimen.category_card_elevation),
@@ -58,7 +68,7 @@ fun MealCategory(category: Category) {
             .fillMaxWidth()
             .padding(top = dimensionResource(R.dimen.category_card_padding))
     ) {
-        Row {
+        Row(Modifier.animateContentSize()) {
 
             Image(
                 painter = rememberAsyncImagePainter(category.imageUrl),
@@ -79,23 +89,30 @@ fun MealCategory(category: Category) {
                 CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
                     Text(
                         text = category.description,
-                        style = MaterialTheme.typography.body1,
+                        style = MaterialTheme.typography.body2,
                         overflow = TextOverflow.Ellipsis,
-                        maxLines = 10
+                        maxLines = if (isExpanded) 10 else 3,
+                        onTextLayout = { lineCount = it.lineCount }
                     )
                 }
             }
 
-            IconButton(
-                onClick = { },
-                modifier = Modifier
-                    .padding(dimensionResource(R.dimen.icon_button_padding))
-                    .align(Alignment.CenterVertically)
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.KeyboardArrowUp,
-                    contentDescription = "Expand row icon"
-                )
+            if (lineCount >= 3) {
+                IconButton(
+                    onClick = { isExpanded = !isExpanded },
+                    modifier = Modifier
+                        .padding(dimensionResource(R.dimen.icon_button_padding))
+                        .align(
+                            if (!isExpanded) Alignment.CenterVertically
+                            else Alignment.Bottom
+                        )
+                ) {
+                    Icon(
+                        imageVector = if (isExpanded) Icons.Filled.KeyboardArrowUp
+                        else Icons.Filled.KeyboardArrowDown,
+                        contentDescription = "Expand collapse row icon"
+                    )
+                }
             }
         }
     }
