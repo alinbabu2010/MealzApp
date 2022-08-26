@@ -64,6 +64,7 @@ fun MealCategory(category: Category) {
                 modifier = Modifier
                     .size(dimensionResource(id = R.dimen.categroy_image_size))
                     .padding(dimensionResource(R.dimen.category_image_padding))
+                    .align(Alignment.CenterVertically)
             )
 
             Column(
