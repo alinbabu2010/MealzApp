@@ -3,7 +3,7 @@ package com.sample.mealzapp.ui.activities
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.sample.mealzapp.ui.screens.MealsCategoriesScreen
+import com.sample.mealzapp.ui.navigations.MealsNavigation
 import com.sample.mealzapp.ui.theme.MealzAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -14,7 +14,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MealzAppTheme {
-                MealsCategoriesScreen()
+                MealsNavigation()
             }
         }
     }
