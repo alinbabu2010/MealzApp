@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="progress_bar_size">48dp</dimen>
+    <dimen name="error_text_padding">16dp</dimen>
+    <dimen name="categroy_image_size">88dp</dimen>
+    <dimen name="category_card_corner_size">8dp</dimen>
+    <dimen name="category_card_elevation">2dp</dimen>
+    <dimen name="category_card_padding">16dp</dimen>
+    <dimen name="category_image_padding">4dp</dimen>
+    <dimen name="category_card_column_padding">16dp</dimen>
+    <dimen name="lazy_column_padding">16dp</dimen>
+</resources>
