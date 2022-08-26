@@ -6,6 +6,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
@@ -69,6 +71,7 @@ fun MealCategory(category: Category) {
 
             Column(
                 modifier = Modifier
+                    .fillMaxWidth(0.8F)
                     .padding(dimensionResource(R.dimen.category_card_column_padding))
                     .align(Alignment.CenterVertically)
             ) {
@@ -81,6 +84,18 @@ fun MealCategory(category: Category) {
                         maxLines = 10
                     )
                 }
+            }
+
+            IconButton(
+                onClick = { },
+                modifier = Modifier
+                    .padding(dimensionResource(R.dimen.icon_button_padding))
+                    .align(Alignment.CenterVertically)
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.KeyboardArrowUp,
+                    contentDescription = "Expand row icon"
+                )
             }
         }
     }

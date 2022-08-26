@@ -9,4 +9,5 @@
     <dimen name="category_image_padding">4dp</dimen>
     <dimen name="category_card_column_padding">16dp</dimen>
     <dimen name="lazy_column_padding">16dp</dimen>
+    <dimen name="icon_button_padding">16dp</dimen>
 </resources>
