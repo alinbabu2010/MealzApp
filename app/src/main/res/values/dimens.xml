@@ -13,4 +13,5 @@
     <dimen name="meal_image_size_expanded">200dp</dimen>
     <dimen name="meal_image_size_collapsed">100dp</dimen>
     <dimen name="meal_image_padding">8dp</dimen>
+    <dimen name="details_card_padding">16dp</dimen>
 </resources>
