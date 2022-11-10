@@ -98,6 +98,7 @@ fun MealCategory(category: Category, navigationCallBack: (String) -> Unit) {
                 CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
                     Text(
                         text = category.description,
+                        modifier = Modifier.animateContentSize(),
                         style = MaterialTheme.typography.body2,
                         overflow = TextOverflow.Ellipsis,
                         maxLines = if (isExpanded) 10 else 3,
