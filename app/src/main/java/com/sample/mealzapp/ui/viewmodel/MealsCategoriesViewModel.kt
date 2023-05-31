@@ -50,5 +50,9 @@ class MealsCategoriesViewModel @Inject constructor(
 
     }
 
+    fun onCategoryExpanded(categoryUiModel: CategoryUiModel) {
+        mealsRepository.setCategoryExpanded(categoryUiModel)
+    }
+
 
 }
