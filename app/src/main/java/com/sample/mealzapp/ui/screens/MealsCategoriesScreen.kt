@@ -39,7 +39,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.sample.mealzapp.R
-import com.sample.mealzapp.data.models.Category
+import com.sample.mealzapp.data.models.CategoryUiModel
 import com.sample.mealzapp.ui.components.ProgressErrorView
 import com.sample.mealzapp.ui.navigations.MealsScreens
 import com.sample.mealzapp.ui.states.MealsUiState
@@ -50,7 +50,7 @@ import com.sample.mealzapp.ui.viewmodel.MealsCategoriesViewModel
 fun MealsCategoriesScreen(navController: NavHostController? = null) {
 
     val viewModel = hiltViewModel<MealsCategoriesViewModel>()
-    val uiState = viewModel.uiState.collectAsState().value
+    val uiState by viewModel.uiState.collectAsState()
 
     when (uiState.state) {
         MealsUiState.State.None,
@@ -60,7 +60,7 @@ fun MealsCategoriesScreen(navController: NavHostController? = null) {
         MealsUiState.State.Success -> {
             LazyColumn(contentPadding = PaddingValues(dimensionResource(R.dimen.lazy_column_padding))) {
                 items(uiState.data) { category ->
-                    MealCategory(category) { id ->
+                    MealCategory(category, onExpanded = viewModel::onCategoryExpanded) { id ->
                         val route = "${MealsScreens.DETAILS_SCREEN.name}/$id"
                         navController?.navigate(route)
                     }
@@ -73,10 +73,14 @@ fun MealsCategoriesScreen(navController: NavHostController? = null) {
 
 
 @Composable
-fun MealCategory(category: Category, navigationCallBack: (String) -> Unit) {
+fun MealCategory(
+    category: CategoryUiModel,
+    onExpanded: (CategoryUiModel) -> Unit,
+    navigationCallBack: (String) -> Unit,
+) {
 
     var isExpanded by rememberSaveable {
-        mutableStateOf(false)
+        mutableStateOf(category.isExpanded)
     }
 
     var lineCount by rememberSaveable {
@@ -125,7 +129,10 @@ fun MealCategory(category: Category, navigationCallBack: (String) -> Unit) {
 
             if (lineCount >= 3) {
                 IconButton(
-                    onClick = { isExpanded = !isExpanded },
+                    onClick = {
+                        onExpanded(category)
+                        isExpanded = !isExpanded
+                    },
                     modifier = Modifier
                         .padding(dimensionResource(R.dimen.icon_button_padding))
                         .align(
