@@ -10,5 +10,9 @@ data class Category(
     @SerializedName("strCategoryDescription")
     val description: String,
     @SerializedName("strCategoryThumb")
-    val imageUrl: String
-)
+    val imageUrl: String,
+) {
+
+    fun toUiModel() = CategoryUiModel(id, name, description, imageUrl)
+
+}
