@@ -1,11 +1,11 @@
 package com.sample.mealzapp.ui.states
 
-import com.sample.mealzapp.data.models.Category
+import com.sample.mealzapp.data.models.CategoryUiModel
 
 data class MealsUiState(
     val state: State = State.None,
-    val data: List<Category> = emptyList(),
-    val error: Throwable? = Throwable()
+    val data: List<CategoryUiModel> = emptyList(),
+    val error: Throwable? = Throwable(),
 ) {
 
     sealed class State {
