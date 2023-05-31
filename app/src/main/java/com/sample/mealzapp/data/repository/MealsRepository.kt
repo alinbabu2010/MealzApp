@@ -1,6 +1,7 @@
 package com.sample.mealzapp.data.repository
 
 import com.sample.mealzapp.data.models.Category
+import com.sample.mealzapp.data.models.CategoryUiModel
 import com.sample.mealzapp.data.network.MealsNetworkDataSource
 import com.sample.mealzapp.data.wrappers.ResponseWrapper
 import javax.inject.Inject
@@ -8,21 +9,34 @@ import javax.inject.Singleton
 
 @Singleton
 class MealsRepository @Inject constructor(
-    private val mealsNetworkDataSource: MealsNetworkDataSource
+    private val mealsNetworkDataSource: MealsNetworkDataSource,
 ) {
 
-    private var cachedMeals = listOf<Category>()
+    private var cachedMeals = listOf<CategoryUiModel>()
 
-    suspend fun getMealsCategories(): ResponseWrapper<List<Category>> {
-        val response = mealsNetworkDataSource.getMealsCategories()
-        cachedMeals = when (response) {
-            is ResponseWrapper.Error -> cachedMeals
-            is ResponseWrapper.Success -> response.data ?: cachedMeals
+    suspend fun getMealsCategories(): ResponseWrapper<List<CategoryUiModel>> {
+        return when (val response = mealsNetworkDataSource.getMealsCategories()) {
+            is ResponseWrapper.Error -> {
+                ResponseWrapper.Error(response.exception)
+            }
+
+            is ResponseWrapper.Success -> {
+                ResponseWrapper.Success(getCategoryUiModelList(response))
+            }
         }
-        return response
     }
 
-    fun getMeal(id: String?): Category? {
+    private fun getCategoryUiModelList(response: ResponseWrapper.Success<List<Category>>): List<CategoryUiModel> {
+        val categoryUiModelList = response.data?.map { category ->
+            val uiModel = category.toUiModel()
+            val cachedUiModel = cachedMeals.firstOrNull { uiModel.id == it.id }
+            uiModel.copy(isExpanded = cachedUiModel?.isExpanded ?: false)
+        }
+        cachedMeals = categoryUiModelList ?: cachedMeals
+        return cachedMeals
+    }
+
+    fun getMeal(id: String?): CategoryUiModel? {
         return cachedMeals.firstOrNull {
             it.id == id
         }
