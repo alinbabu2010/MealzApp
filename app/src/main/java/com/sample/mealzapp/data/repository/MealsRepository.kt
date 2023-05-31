@@ -28,4 +28,14 @@ class MealsRepository @Inject constructor(
         }
     }
 
+    fun setCategoryExpanded(categoryUiModel: CategoryUiModel) {
+        cachedMeals = cachedMeals.map {
+            if (it.id == categoryUiModel.id) {
+                it.isExpanded = !it.isExpanded
+            }
+            it
+        }
+    }
+
+
 }
